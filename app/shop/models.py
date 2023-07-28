@@ -26,7 +26,7 @@ from django.utils import timezone
 
 class Category(models.Model):
     name = models.CharField(max_length=200)
-    parent_category = models.ForeignKey('self', on_delete=models.CASCADE)
+    parent_category = models.ForeignKey('self', on_delete=models.CASCADE, null=True)
 
 
 class Product(models.Model):
