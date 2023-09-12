@@ -26,17 +26,17 @@ from django.utils import timezone
 
 class Category(models.Model):
     name = models.CharField(max_length=200)
-    parent_category = models.ForeignKey('self', on_delete=models.CASCADE, null=True)
+    parent_category = models.ForeignKey('self', on_delete=models.CASCADE, null=True, related_name='children')
 
 
 class Product(models.Model):
     name = models.CharField(max_length=200)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='products')
 
 
 class Bucket(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    product = models.ManyToManyField(Product)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='bucket')
+    products = models.ManyToManyField(Product)
 
 
 class Order(models.Model):
