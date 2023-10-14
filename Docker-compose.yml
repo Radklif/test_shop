@@ -1,0 +1,23 @@
+version: "3"
+
+services:
+    backend:
+        build: ./
+        expose:
+            - "8000"
+        command: python manage.py runserver 0.0.0.0:8000
+        container_name: backend
+    nginx:
+       # build: ./nginx1
+        image: nginx:alpine
+        ports:
+            - "81:80"
+        depends_on:
+            - backend
+        volumes:
+            - ./nginx/default.conf.template:/etc/nginx/templates/default.conf.template
+        container_name: nginx
+        environment:
+            - BACKEND_HOST=backend
+            - BACKEND_PORT=8000
+            - NGINX_PORT=80
