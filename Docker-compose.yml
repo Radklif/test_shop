@@ -5,13 +5,16 @@ services:
         build: ./
         expose:
             - "8000"
-        command: python manage.py runserver 0.0.0.0:8000
+        command: sh -c "
+            ./manage.py collectstatic --no-input
+            && ./manage.py migrate
+            && ./manage.py loaddata ./fixtures/*.json 
+            && python manage.py runserver 0.0.0.0:8000"
         container_name: backend
     nginx:
-       # build: ./nginx1
         image: nginx:alpine
         ports:
-            - "81:80"
+            - "80:80"
         depends_on:
             - backend
         volumes:
